@@ -1,7 +1,7 @@
 from typing import Tuple
 
 import numpy as np
-from scipy.ndimage import uniform_filter, laplace, gaussian_filter
+from scipy.ndimage import uniform_filter, laplace, gaussian_filter  # type: ignore
 
 from filters import guided_filter
 
