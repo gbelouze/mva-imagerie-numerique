@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.ndimage import uniform_filter # type: ignore
+from scipy.ndimage import uniform_filter  # type: ignore
 
 
 def guided_filter(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -> np.ndarray:
@@ -17,8 +17,8 @@ def guided_filter(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -> np.
 
 
 def guided_filter_gray(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -> np.ndarray:
-    assert len(im_I) == 2
-    assert len(im_P) == 2
+    assert len(im_I.shape) == 2
+    assert len(im_P.shape) == 2
 
     size = 2 * r + 1, 2
 
@@ -36,10 +36,9 @@ def guided_filter_gray(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -
 
 
 def guided_filter_rgb(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -> np.ndarray:
-    assert len(im_I) == 3
-    assert len(im_P) == 2
+    assert len(im_I.shape) == 3
+    assert len(im_P.shape) == 2
 
-    m, n = im_P.shape
     size = 2 * r + 1
 
     mean_I = uniform_filter(im_I, (size, size, 0))
@@ -47,9 +46,9 @@ def guided_filter_rgb(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) ->
     mean_IP = uniform_filter(im_I * im_P[:, :, None], (size, size, 0))
 
     II = np.einsum("ijk,ijl->ijkl", im_I, im_I)
-    ImeanI = np.einsum("ijk,ijl->ijkl", im_I, mean_I)
     meanImeanI = np.einsum("ijk,ijl->ijkl", mean_I, mean_I)
-    sigma_I = uniform_filter(II + meanImeanI - 2 * ImeanI) / (size ** 2 - 1)
+
+    sigma_I = uniform_filter(II, (size, size, 0, 0)) - meanImeanI
 
     a = np.einsum('ijkl,ijl->ijk',
                   np.linalg.inv(sigma_I + eps * np.identity(3)),
