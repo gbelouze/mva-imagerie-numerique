@@ -1,6 +1,5 @@
-[tool.autopep8]
-
-max_line_length = 100
+[tool.black]
+line_length = 100
 ignore = ["E501"]
 in_place = true
 recursive = true
