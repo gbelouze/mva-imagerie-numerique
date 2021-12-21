@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.ndimage import uniform_filter
+from scipy.ndimage import uniform_filter # type: ignore
 
 
 def guided_filter(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -> np.ndarray:
