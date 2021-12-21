@@ -1,9 +1,8 @@
 from typing import Tuple
 
 import numpy as np
+from gf.filters import guided_filter
 from scipy.ndimage import uniform_filter, laplace, gaussian_filter  # type: ignore
-
-from filters import guided_filter
 
 
 def decompose(im: np.ndarray, k: int = 31) -> Tuple[np.ndarray, np.ndarray]:
@@ -34,8 +33,10 @@ def weight_maps(ims: list) -> list:
 def fusion(ims: list, r1=45, r2=7, eps1=0.3, eps2=1e-6):
     bs, ds = zip(*[decompose(im) for im in ims])
     weights = weight_maps(ims)
-    weights_b = [guided_filter(p, i, r1, eps1) for p, i in zip(weights, ims)]
-    weights_d = [guided_filter(p, i, r2, eps2) for p, i in zip(weights, ims)]
+    weights_b = np.stack([guided_filter(p, i, r1, eps1) for p, i in zip(weights, ims)])
+    weights_d = np.stack([guided_filter(p, i, r2, eps2) for p, i in zip(weights, ims)])
+    weights_b = weights_b / np.sum(weights_b, axis=0)
+    weights_d = weights_d / np.sum(weights_b, axis=0)
     b_bar = sum(w[:, :, None] * b for w, b in zip(weights_b, bs))
     d_bar = sum(w[:, :, None] * d for w, d in zip(weights_d, ds))
     return b_bar + d_bar
