@@ -3,6 +3,13 @@ from scipy.ndimage import uniform_filter
 
 
 def guided_filter(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -> np.ndarray:
+    if len(im_I.shape) > 2:
+        return guided_filter_rgb(im_P, im_I, r, eps)
+    else:
+        return guided_filter_gray(im_P, im_I, r, eps)
+
+
+def guided_filter_gray(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -> np.ndarray:
     if len(im_P.shape) > 2:
         return np.stack([guided_filter(ch, im_I, r, eps)
                          for ch in np.moveaxis(im_P, -1, 0)], axis=-1)
