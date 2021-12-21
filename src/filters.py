@@ -3,16 +3,22 @@ from scipy.ndimage import uniform_filter
 
 
 def guided_filter(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -> np.ndarray:
-    if len(im_I.shape) > 2:
+    assert 2 <= len(im_P.shape) <= 3
+    assert 2 <= len(im_I.shape) <= 3
+
+    if len(im_P.shape) == 3:
+        return np.stack([guided_filter(channel_P, im_I, r, eps)
+                         for channel_P in np.transpose(im_P, 2, 0, 1)], axis=-1)
+
+    if len(im_I.shape) == 3:
         return guided_filter_rgb(im_P, im_I, r, eps)
     else:
         return guided_filter_gray(im_P, im_I, r, eps)
 
 
 def guided_filter_gray(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -> np.ndarray:
-    if len(im_P.shape) > 2:
-        return np.stack([guided_filter(ch, im_I, r, eps)
-                         for ch in np.moveaxis(im_P, -1, 0)], axis=-1)
+    assert len(im_I) == 2
+    assert len(im_P) == 2
 
     size = 2 * r + 1, 2
 
@@ -30,23 +36,24 @@ def guided_filter_gray(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -
 
 
 def guided_filter_rgb(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -> np.ndarray:
-    if len(im_P.shape) > 2:
-        return np.stack([guided_filter_rgb(ch, im_I, r, eps)
-                         for ch in np.moveaxis(im_P, -1, 0)], axis=-1)
+    assert len(im_I) == 3
+    assert len(im_P) == 2
+
     m, n = im_P.shape
     size = 2 * r + 1
 
     mean_I = uniform_filter(im_I, (size, size, 0))
     mean_P = uniform_filter(im_P, size)
-    mean_IP = uniform_filter(im_I * im_P[None, :].reshape(m, n, 1), (size, size, 0))
+    mean_IP = uniform_filter(im_I * im_P[:, :, None], (size, size, 0))
 
-    sig = uniform_filter(np.einsum('ijk,ijl->ijkl', im_I, im_I),
-                         (size, size, 0, 0)) * (size ** 2 / (size ** 2 - 1))
+    II = np.einsum("ijk,ijl->ijkl", im_I, im_I)
+    ImeanI = np.einsum("ijk,ijl->ijkl", im_I, mean_I)
+    meanImeanI = np.einsum("ijk,ijl->ijkl", mean_I, mean_I)
+    sigma_I = uniform_filter(II + meanImeanI - 2 * ImeanI) / (size ** 2 - 1)
 
     a = np.einsum('ijkl,ijl->ijk',
-                  sig + eps * np.identity(3),
-                  (mean_IP - mean_I * mean_P[None, :].reshape(m, n, 1)))
-
+                  np.linalg.inv(sigma_I + eps * np.identity(3)),
+                  mean_IP - mean_I * mean_P[:, :, None])
     b = mean_P - np.einsum('ijk,ijk->ij', a, mean_I)
 
     a = uniform_filter(a, (size, size, 0))
