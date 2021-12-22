@@ -22,7 +22,7 @@ def guided_filter_gray(im_P: np.ndarray, im_I: np.ndarray, r: int, eps: float) -
     assert len(im_I.shape) == 2
     assert len(im_P.shape) == 2
 
-    size = 2 * r + 1, 2
+    size = 2 * r + 1
 
     mean_I = uniform_filter(im_I, size)
     mean_P = uniform_filter(im_P, size)
