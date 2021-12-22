@@ -2,7 +2,14 @@
 
 ## Articles
 
+### Main
+
 1. [Image fusion with guided filtering](https://perso.telecom-paristech.fr/gousseau/MVA/Projets2021/FocusFusion/fusion.pdf) Li, S., Kang, X., & Hu, J. (2013).
+
+### Complement
+
+2. [Image fusion with guided filtering](https://exppad.com/gff/) Élie Michel
+3. [Guided Filter](http://kaiminghe.com/publications/eccv10guidedfilter.pdf) He, Sun, Tang (2010)
 
 ## Descriptif
 
