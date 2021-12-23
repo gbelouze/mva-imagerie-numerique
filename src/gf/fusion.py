@@ -42,4 +42,6 @@ def fusion(ims: List[np.ndarray], r1=45, r2=7, eps1=0.3, eps2=1e-6):
     b_bar = sum(w[:, :, None] * b for w, b in zip(weights_b, bs))
     d_bar = sum(w[:, :, None] * d for w, d in zip(weights_d, ds))
     out = b_bar + d_bar
-    return (out - np.min(out)) / (np.max(out) - np.min(out))
+    if np.max(out) > 1 or np.min(out) < 0:
+        out = (out - np.min(out)) / (np.max(out) - np.min(out))
+    return out
