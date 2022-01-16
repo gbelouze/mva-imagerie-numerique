@@ -5,43 +5,56 @@ from gf.filters import guided_filter
 from scipy.ndimage import uniform_filter, laplace, gaussian_filter  # type: ignore
 
 
-def rgb(im: np.ndarray) -> bool:
-    assert 2 <= len(im.shape) <= 3
-    return len(im.shape) == 3
+class gff:
+    def __init__(self, ims: List[np.ndarray], color=None):
+        if color is None:
+            assert 2 <= len(ims[0].shape) <= 3
+            color = 'rgb' if len(ims[0].shape) == 3 else 'gray'
+        assert (color in ['gray', 'rgb', 'hsv'])
+        self.ims = ims
+        self.color = color
+        self.multichannel = color != 'gray'
 
+    def decompose(self, im: np.ndarray, k: int = 31) -> Tuple[np.ndarray, np.ndarray]:
+        size = [k, k, 0] if self.multichannel else k
+        b = uniform_filter(im, size=size)
+        d = im - b
+        return b, d
 
-def decompose(im: np.ndarray, k: int = 31) -> Tuple[np.ndarray, np.ndarray]:
-    size = [k, k, 0] if rgb(im) else k
-    b = uniform_filter(im, size=size)
-    d = im - b
-    return b, d
+    def saliency(self, im: np.ndarray, sigma: float = 5.0, r: int = 5) -> np.ndarray:
+        if self.color == 'rgb':
+            im = im @ np.array([0.2989, 0.5870, 0.1140])  # rgb weights
+        elif self.color == 'hsv':
+            im = im[:, :, 2]  # V channel
+        h = laplace(im)
+        s = gaussian_filter(np.abs(h), sigma, truncate=r / sigma)
+        return s
 
+    def weight_maps(self, ims: List[np.ndarray]) -> List[np.ndarray]:
+        saliencies = np.stack([self.saliency(im) for im in ims], axis=0)
+        weights = (saliencies == np.max(saliencies, axis=0)[None, :]).astype(np.float64)
+        return [w for w in weights]
 
-def saliency(im: np.ndarray, sigma: float = 5.0, r: int = 5) -> np.ndarray:
-    if rgb(im):
-        im = im @ np.array([0.2989, 0.5870, 0.1140])  # rgb weights
-    h = laplace(im)
-    s = gaussian_filter(np.abs(h), sigma, truncate=r / sigma)
-    return s
+    def fusion(self, r1=45, r2=7, eps1=0.3, eps2=1e-6, filt=guided_filter):
+        bs, ds = zip(*[self.decompose(im) for im in self.ims])
+        weights = self.weight_maps(self.ims)
 
+        weights_b = np.stack([filt(p, i, r1, eps1) for p, i in zip(weights, self.ims)])
+        weights_d = np.stack([filt(p, i, r2, eps2) for p, i in zip(weights, self.ims)])
+        weights_b = weights_b / np.sum(weights_b, axis=0)
+        weights_d = weights_d / np.sum(weights_b, axis=0)
+        b_bar = sum(w[:, :, None] * b for w, b in zip(weights_b, bs))
+        d_bar = sum(w[:, :, None] * d for w, d in zip(weights_d, ds))
+        out = b_bar + d_bar
+        if self.color == 'rgb' and (np.max(out) > 1 or np.min(out) < 0):
+            out = (out - np.min(out)) / (np.max(out) - np.min(out))
+        return out
 
-def weight_maps(ims: List[np.ndarray]) -> List[np.ndarray]:
-    saliencies = np.stack([saliency(im) for im in ims], axis=0)
-    weights = (saliencies == saliencies.max(axis=0)[None, :]).astype(np.float64)
-    return [w for w in weights]
-
-
-def fusion(ims: List[np.ndarray], r1=45, r2=7, eps1=0.3, eps2=1e-6, filt=guided_filter):
-    bs, ds = zip(*[decompose(im) for im in ims])
-    weights = weight_maps(ims)
-
-    weights_b = np.stack([filt(p, i, r1, eps1) for p, i in zip(weights, ims)])
-    weights_d = np.stack([filt(p, i, r2, eps2) for p, i in zip(weights, ims)])
-    weights_b = weights_b / np.sum(weights_b, axis=0)
-    weights_d = weights_d / np.sum(weights_b, axis=0)
-    b_bar = sum(w[:, :, None] * b for w, b in zip(weights_b, bs))
-    d_bar = sum(w[:, :, None] * d for w, d in zip(weights_d, ds))
-    out = b_bar + d_bar
-    if np.max(out) > 1 or np.min(out) < 0:
-        out = (out - np.min(out)) / (np.max(out) - np.min(out))
-    return out
+    def fusion_without_separation(self, r=45, eps=0.3):
+        weights = np.stack([guided_filter(p, i, r, eps)
+                            for p, i in zip(self.weight_maps(self.ims), self.ims)])
+        weights = weights / np.sum(weights, axis=0)
+        out = sum(w[:, :, None] * b for w, b in zip(weights, self.ims))
+        if self.color == 'rgb' and (np.max(out) > 1 or np.min(out) < 0):
+            out = (out - np.min(out)) / (np.max(out) - np.min(out))
+        return out
