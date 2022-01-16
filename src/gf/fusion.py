@@ -31,12 +31,12 @@ def weight_maps(ims: List[np.ndarray]) -> List[np.ndarray]:
     return [w for w in weights]
 
 
-def fusion(ims: List[np.ndarray], r1=45, r2=7, eps1=0.3, eps2=1e-6):
+def fusion(ims: List[np.ndarray], r1=45, r2=7, eps1=0.3, eps2=1e-6, filt=guided_filter):
     bs, ds = zip(*[decompose(im) for im in ims])
     weights = weight_maps(ims)
 
-    weights_b = np.stack([guided_filter(p, i, r1, eps1) for p, i in zip(weights, ims)])
-    weights_d = np.stack([guided_filter(p, i, r2, eps2) for p, i in zip(weights, ims)])
+    weights_b = np.stack([filt(p, i, r1, eps1) for p, i in zip(weights, ims)])
+    weights_d = np.stack([filt(p, i, r2, eps2) for p, i in zip(weights, ims)])
     weights_b = weights_b / np.sum(weights_b, axis=0)
     weights_d = weights_d / np.sum(weights_b, axis=0)
     b_bar = sum(w[:, :, None] * b for w, b in zip(weights_b, bs))
