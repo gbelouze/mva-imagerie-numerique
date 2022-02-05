@@ -21,7 +21,8 @@ def test_decompose_rgb():
 
 def test_fusion_black_black():
     black = np.zeros((100, 100))
-    fused = fusion.fusion([black, black])
+    gff = fusion.gff([black, black])
+    fused = gff.fusion()
     diff = np.abs(fused - black).max()
     assert diff < 1e-10
 
@@ -29,4 +30,5 @@ def test_fusion_black_black():
 def test_fusion_black_white():
     black = np.zeros((100, 100))
     white = np.ones((100, 100))
-    fusion.fusion([black, white])
+    gff = fusion.gff([black, white])
+    gff.fusion()

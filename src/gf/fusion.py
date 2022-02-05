@@ -1,30 +1,40 @@
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 
 import numpy as np
 from gf.filters import guided_filter
 from scipy.ndimage import uniform_filter, laplace, gaussian_filter  # type: ignore
 
 
+def decompose(
+    im: np.ndarray, multichannel: Optional[bool] = None, k: int = 31
+) -> Tuple[np.ndarray, np.ndarray]:
+    if multichannel is None:
+        multichannel = im.ndim == 3
+    size = [k, k, 0] if multichannel else k
+    b = uniform_filter(im, size=size)
+    d = im - b
+    return b, d
+
+
 class gff:
+    """Implementation of the image fusion with guided filtering method."""
+
     def __init__(self, ims: List[np.ndarray], color=None):
         if color is None:
-            assert 2 <= len(ims[0].shape) <= 3
-            color = 'rgb' if len(ims[0].shape) == 3 else 'gray'
-        assert (color in ['gray', 'rgb', 'hsv'])
+            assert 2 <= ims[0].ndim <= 3
+            color = "rgb" if ims[0].ndim == 3 else "gray"
+        assert color in ["gray", "rgb", "hsv"]
         self.ims = ims
         self.color = color
-        self.multichannel = color != 'gray'
+        self.multichannel = color != "gray"
 
     def decompose(self, im: np.ndarray, k: int = 31) -> Tuple[np.ndarray, np.ndarray]:
-        size = [k, k, 0] if self.multichannel else k
-        b = uniform_filter(im, size=size)
-        d = im - b
-        return b, d
+        return decompose(im, self.multichannel, k)
 
     def saliency(self, im: np.ndarray, sigma: float = 5.0, r: int = 5) -> np.ndarray:
-        if self.color == 'rgb':
+        if self.color == "rgb":
             im = im @ np.array([0.2989, 0.5870, 0.1140])  # rgb weights
-        elif self.color == 'hsv':
+        elif self.color == "hsv":
             im = im[:, :, 2]  # V channel
         h = laplace(im)
         s = gaussian_filter(np.abs(h), sigma, truncate=r / sigma)
@@ -46,15 +56,17 @@ class gff:
         b_bar = sum(w[:, :, None] * b for w, b in zip(weights_b, bs))
         d_bar = sum(w[:, :, None] * d for w, d in zip(weights_d, ds))
         out = b_bar + d_bar
-        if self.color == 'rgb' and (np.max(out) > 1 or np.min(out) < 0):
+        if self.color == "rgb" and (np.max(out) > 1 or np.min(out) < 0):
             out = (out - np.min(out)) / (np.max(out) - np.min(out))
         return out
 
     def fusion_without_separation(self, r=45, eps=0.3):
-        weights = np.stack([guided_filter(p, i, r, eps)
-                            for p, i in zip(self.weight_maps(self.ims), self.ims)])
+        """Fusion without base/detail separation"""
+        weights = np.stack(
+            [guided_filter(p, i, r, eps) for p, i in zip(self.weight_maps(self.ims), self.ims)]
+        )
         weights = weights / np.sum(weights, axis=0)
         out = sum(w[:, :, None] * b for w, b in zip(weights, self.ims))
-        if self.color == 'rgb' and (np.max(out) > 1 or np.min(out) < 0):
+        if self.color == "rgb" and (np.max(out) > 1 or np.min(out) < 0):
             out = (out - np.min(out)) / (np.max(out) - np.min(out))
         return out
