@@ -4,7 +4,7 @@ from imageio import imread
 import os
 
 im_gray = imread(f"{os.path.dirname(__file__)}/../data/petrovic/fused001_1.tif") / 255
-im_rgb = imread(f"{os.path.dirname(__file__)}/../data/lytro/lytro-01-A.jpg") / 255
+im_rgb = imread(f"{os.path.dirname(__file__)}/../data/lytro/1/lytro-01-A.jpg") / 255
 
 
 def test_decompose_gray():
@@ -31,4 +31,5 @@ def test_fusion_black_white():
     black = np.zeros((100, 100))
     white = np.ones((100, 100))
     gff = fusion.gff([black, white])
-    gff.fusion()
+    out = gff.fusion()
+    assert out.shape == black.shape == white.shape
