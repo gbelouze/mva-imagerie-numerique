@@ -53,11 +53,13 @@ class gff:
         weights_d = np.stack([filt(p, i, r2, eps2) for p, i in zip(weights, self.ims)])
         weights_b = weights_b / np.sum(weights_b, axis=0)
         weights_d = weights_d / np.sum(weights_b, axis=0)
-        b_bar = sum(w[:, :, None] * b for w, b in zip(weights_b, bs))
-        d_bar = sum(w[:, :, None] * d for w, d in zip(weights_d, ds))
-        out = b_bar + d_bar
-        if self.color == "rgb" and (np.max(out) > 1 or np.min(out) < 0):
-            out = (out - np.min(out)) / (np.max(out) - np.min(out))
+        if self.multichannel:
+            b_bar = sum(w[:, :, None] * b for w, b in zip(weights_b, bs))
+            d_bar = sum(w[:, :, None] * d for w, d in zip(weights_d, ds))
+        else:
+            b_bar = sum(w * b for w, b in zip(weights_b, bs))
+            d_bar = sum(w * d for w, d in zip(weights_d, ds))
+        out = np.clip(b_bar + d_bar, 0, 1)
         return out
 
     def fusion_without_separation(self, r=45, eps=0.3):
