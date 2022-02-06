@@ -30,9 +30,10 @@ class gff:
         self.multichannel = color != "gray"
 
         self.compute_weight_maps()
-        self.refined_weights = {"base": np.empty(0), "detail": np.empty(0)}
-        self.normalised_refined_weights = {"base": np.empty(0), "detail": np.empty(0)}
-        self.fused = {"base": np.empty(0), "detail": np.empty(0)}
+        self.refined_weights = {"base": np.empty(0), "detail": np.empty(0), "full": np.empty(0)}
+        self.normalised_refined_weights = {"base": np.empty(0),
+            "detail": np.empty(0), "full": np.empty(0)}
+        self.fused = {"base": np.empty(0), "detail": np.empty(0), "full": np.empty(0)}
 
     def decompose(self, im: np.ndarray, k: int = 31) -> Tuple[np.ndarray, np.ndarray]:
         return decompose(im, self.multichannel, k)
@@ -75,13 +76,15 @@ class gff:
         out = np.clip(b_bar + d_bar, 0, 1)
         return out
 
-    def fusion_without_separation(self, r=45, eps=0.3):
+    def fusion_without_separation(self, r=45, eps=0.3, filt=guided_filter):
         """Fusion without base/detail separation"""
-        weights = np.stack(
-            [guided_filter(p, i, r, eps) for p, i in zip(self.weight_maps(self.ims), self.ims)]
-        )
-        weights = weights / np.sum(weights, axis=0)
-        out = sum(w[:, :, None] * b for w, b in zip(weights, self.ims))
-        if self.color == "rgb" and (np.max(out) > 1 or np.min(out) < 0):
-            out = (out - np.min(out)) / (np.max(out) - np.min(out))
+        self.refined_weights["full"] = weights = np.stack(
+            [filt(p, i, r, eps) for p, i in zip(self.weights, self.ims)]
+        ).clip(0, 1)
+        self.normalised_refined_weights["full"] = weights = weights / np.sum(weights, axis=0)
+        if self.multichannel:
+            self.fused["full"] = out = sum(w[:, :, None] * i for w, i in zip(weights, self.ims))
+        else:
+            self.fused["full"] = out = sum(w * i for w, i in zip(weights, self.ims))
+        out = np.clip(out, 0, 1)
         return out
