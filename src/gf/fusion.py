@@ -31,8 +31,11 @@ class gff:
 
         self.compute_weight_maps()
         self.refined_weights = {"base": np.empty(0), "detail": np.empty(0), "full": np.empty(0)}
-        self.normalised_refined_weights = {"base": np.empty(0),
-            "detail": np.empty(0), "full": np.empty(0)}
+        self.normalised_refined_weights = {
+            "base": np.empty(0),
+            "detail": np.empty(0),
+            "full": np.empty(0),
+        }
         self.fused = {"base": np.empty(0), "detail": np.empty(0), "full": np.empty(0)}
 
     def decompose(self, im: np.ndarray, k: int = 31) -> Tuple[np.ndarray, np.ndarray]:
