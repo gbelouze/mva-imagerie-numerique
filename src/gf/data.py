@@ -11,7 +11,7 @@ def _imread(path: Path) -> np.ndarray:
 
 
 def _is_image(path: Path) -> bool:
-    return path.is_file() and path.suffix in [".tif", ".jpeg", ".jpg", ".png"]
+    return path.is_file() and path.suffix in [".tif", ".jpeg", ".jpg", ".png", ".JPG"]
 
 
 def _group_images_in_dir(path: Path) -> Tuple[str, List[Path]]:
