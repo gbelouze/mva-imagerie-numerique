@@ -1,5 +1,6 @@
 import cv2  # type: ignore
 import numpy as np
+from typing import List
 
 
 def make_uint8(image: np.ndarray) -> np.ndarray:
@@ -59,7 +60,7 @@ def findHomography(source: np.ndarray, target: np.ndarray) -> np.ndarray:
     return homography
 
 
-def registration(*imgs: np.ndarray) -> list[np.ndarray]:
+def registration(*imgs: np.ndarray) -> List[np.ndarray]:
     """Registration for an arbitrary number n of images.
     Images are taken in order and successively transformed in the reference frame of the following one
     (hence order of arguments matter !). Warning : errors will propagate if the number of images is too large.
