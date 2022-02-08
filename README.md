@@ -1,5 +1,21 @@
 # mva-imagerie-numerique
 
+## How to use this repository ?
+
+You can read the report online as a [notebook](notebook/rendu.ipynb). If you want to run it yourself, we suggest to
+- create a python virtual environment, for instance named `imagerie-numerique`
+- install the dependencies
+```bash
+pip install -r requirements.txt
+pip install -e .
+```
+- install your virtual environment as a jupyter kernel
+```bash
+pip install ipykernel
+python -m ipykernel install --user --name=imagerie-numerique
+```
+When you open the notebook, `imagerie-numerique` should be available as a kernel.
+
 ## Articles
 
 ### Main
