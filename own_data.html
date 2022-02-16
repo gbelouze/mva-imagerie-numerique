@@ -206,23 +206,6 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/gbelouze/mva-imagerie-numerique/main?urlpath=tree/docs/own_data.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
@@ -338,8 +321,8 @@
 <p>Since all photographs are taken from the same spot (no translation), we know that pairs of images are linked by a homography. Our idea then was to use registration techniques to retrieve these homographies, express all images in a single coordinate frame, and only then apply the fusion algorithm. The algorithm thus writes</p>
 <ol class="simple">
 <li><p>Choose <span class="math notranslate nohighlight">\(I_0\)</span> one of the images. We will express everything in its reference frame</p></li>
-<li><p>Registration step<br />
-a. extract keypoints from images<br />
+<li><p>Registration step
+a. extract keypoints from images
 b. <span class="math notranslate nohighlight">\(\forall k\)</span> compute homographies <span class="math notranslate nohighlight">\(H_{k}\)</span> from <span class="math notranslate nohighlight">\(I_{k}\)</span> to <span class="math notranslate nohighlight">\(I_0\)</span> (RANSAC algorithm)</p></li>
 <li><p>Apply the guided filter fusion algorithm on the <span class="math notranslate nohighlight">\(H_kI_k\)</span> images</p></li>
 </ol>
@@ -347,8 +330,8 @@ b. <span class="math notranslate nohighlight">\(\forall k\)</span> compute homog
 <ol class="simple">
 <li><p>Order images by focal distance</p></li>
 <li><p>We will express everything in the reference frame of the first image</p></li>
-<li><p>Registration step<br />
-a. extract keypoints from images<br />
+<li><p>Registration step
+a. extract keypoints from images
 b. <span class="math notranslate nohighlight">\(\forall k\)</span> compute homographies <span class="math notranslate nohighlight">\(H_{k}\)</span> from <span class="math notranslate nohighlight">\(I_{k+1}\)</span> to <span class="math notranslate nohighlight">\(I_{k}\)</span> (RANSAC algorithm)</p></li>
 <li><p>Apply the guided filter fusion algorithm on the <span class="math notranslate nohighlight">\(H_1H_2\ldots H_kI_k\)</span> images</p></li>
 </ol>

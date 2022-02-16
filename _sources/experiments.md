@@ -44,7 +44,7 @@ The article is contrasted about this issue, stating at first:
 > "the GFF
 method does not depend much on the exact parameter choice."
 
-However, the article ends with 
+However, the article ends with
 
 > "adaptively choosing the parameters of the guided
 filter can be further researched."
@@ -436,7 +436,7 @@ fused_hsv = hsv_gff.fusion()
 
 # result: hsv to rgb
 result = hsv_to_rgb(fused_hsv)
-plot_images(*multi_exposure_sample, result, 
+plot_images(*multi_exposure_sample, result,
             labels=['input 1', 'input 2', 'input 3', 'result'],
             title="Fusion with HSV channels")
 plt.show()
@@ -463,7 +463,7 @@ out_v = hsv_to_rgb(filters.guided_filter(im_hsv, v, r=7, eps=1e-3))
 out_h = hsv_to_rgb(filters.guided_filter(im_hsv, h, r=7, eps=1e-3))
 out_full = hsv_to_rgb(filters.guided_filter(im_hsv, im_hsv, r=7, eps=1e-3))
 
-plot_images(out_v, out_h, out_full, 
+plot_images(out_v, out_h, out_full,
             labels=['V guide only', 'H guide only', 'full guide'],
             title="Guided filtering (HSV space)")
 ```
@@ -491,7 +491,7 @@ out_g = filters.guided_filter(im_rgb, g, r=7, eps=1e-3)
 
 out_full = filters.guided_filter(im_rgb, im_rgb, r=7, eps=1e-3)
 
-plot_images(out_r, out_g, out_full, 
+plot_images(out_r, out_g, out_full,
             labels=['R guide only', 'G guide only', 'full guide'],
             title="Guided filtering (RGB space)")
 ```

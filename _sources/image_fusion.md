@@ -78,7 +78,7 @@ render:
   image:
     width: 600px
 ---
-plot_images(*gff_focus.weights, 
+plot_images(*gff_focus.weights,
             labels=['weight map 1', 'weight map 2'])
 plt.show()
 ```
@@ -130,7 +130,7 @@ plt.show()
 +++ {"id": "3dc96065-26da-4e2e-91dc-4c3fd513391a"}
 
 ### Refined weight map
-The key idea is to use guided filtering with the original image as guidance. This mitigates noise and edge-aligns weight maps. 
+The key idea is to use guided filtering with the original image as guidance. This mitigates noise and edge-aligns weight maps.
 
 Different parameters (see below) are used to get distinct weight maps for the base and details layers. In general, a larger window size, and a larger regularisation $\varepsilon$ are used for the base layer.
 
@@ -176,7 +176,7 @@ plt.show()
 +++ {"id": "d62f2ad2-925b-41e6-b94d-4f68485eee05"}
 
 ### Fusion
-Those refined weight maps are used to fuse images in each layer base and details). Finally, the layers are added up to produce a single final image.  
+Those refined weight maps are used to fuse images in each layer base and details). Finally, the layers are added up to produce a single final image.
 For multi-focus, the base fusion is not that important as the base images basically look the same (a blurry version of the scene). However, for HDR, both base fusion and detail fusion must be done carefully.
 
 ```{code-cell} ipython3
@@ -194,7 +194,7 @@ render:
   image:
     width: 800px
 ---
-plot_images(gff_focus.fused["base"], gff_focus.fused["detail"], fused_focus, 
+plot_images(gff_focus.fused["base"], gff_focus.fused["detail"], fused_focus,
             labels=['fused bases', 'fused details', 'final result'])
 plt.show()
 ```
@@ -230,7 +230,7 @@ render:
     width: 800px
 tags: ["remove-input"]
 ---
-plot_images(*multi_exposure_sample, multi_exposure_fused, 
+plot_images(*multi_exposure_sample, multi_exposure_fused,
             labels=['input 1', 'input 2', 'input 3', 'result'])
 plt.show()
 ```
@@ -245,7 +245,7 @@ render:
     width: 800px
 tags: ["remove-input"]
 ---
-plot_images(*multi_focus_sample, multi_focus_fused, 
+plot_images(*multi_focus_sample, multi_focus_fused,
             labels=['input 1', 'input 2', 'result'])
 plt.show()
 ```
@@ -265,7 +265,7 @@ render:
     width: 800px
 tags: ["remove-input"]
 ---
-plot_images(*gray_sample, multi_gray_fused, 
+plot_images(*gray_sample, multi_gray_fused,
             labels=['input 1', 'input 2', 'result'])
 plt.show()
 ```

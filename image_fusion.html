@@ -206,23 +206,6 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/gbelouze/mva-imagerie-numerique/main?urlpath=tree/docs/image_fusion.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
@@ -360,7 +343,7 @@
 <p>Weight maps are constructed to be <span class="math notranslate nohighlight">\(1\)</span> at pixel <span class="math notranslate nohighlight">\(i\)</span> if the image has the highest saliency (i.e. gradient norm) at pixel <span class="math notranslate nohighlight">\(i\)</span>, and <span class="math notranslate nohighlight">\(0\)</span> otherwise.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_images</span><span class="p">(</span><span class="o">*</span><span class="n">gff_focus</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span> 
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_images</span><span class="p">(</span><span class="o">*</span><span class="n">gff_focus</span><span class="o">.</span><span class="n">weights</span><span class="p">,</span>
             <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;weight map 1&#39;</span><span class="p">,</span> <span class="s1">&#39;weight map 2&#39;</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -448,11 +431,11 @@
 </div>
 <div class="section" id="fusion">
 <h3>Fusion<a class="headerlink" href="#fusion" title="Permalink to this headline">¶</a></h3>
-<p>Those refined weight maps are used to fuse images in each layer base and details). Finally, the layers are added up to produce a single final image.<br />
+<p>Those refined weight maps are used to fuse images in each layer base and details). Finally, the layers are added up to produce a single final image.
 For multi-focus, the base fusion is not that important as the base images basically look the same (a blurry version of the scene). However, for HDR, both base fusion and detail fusion must be done carefully.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_images</span><span class="p">(</span><span class="n">gff_focus</span><span class="o">.</span><span class="n">fused</span><span class="p">[</span><span class="s2">&quot;base&quot;</span><span class="p">],</span> <span class="n">gff_focus</span><span class="o">.</span><span class="n">fused</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">],</span> <span class="n">fused_focus</span><span class="p">,</span> 
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_images</span><span class="p">(</span><span class="n">gff_focus</span><span class="o">.</span><span class="n">fused</span><span class="p">[</span><span class="s2">&quot;base&quot;</span><span class="p">],</span> <span class="n">gff_focus</span><span class="o">.</span><span class="n">fused</span><span class="p">[</span><span class="s2">&quot;detail&quot;</span><span class="p">],</span> <span class="n">fused_focus</span><span class="p">,</span>
             <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fused bases&#39;</span><span class="p">,</span> <span class="s1">&#39;fused details&#39;</span><span class="p">,</span> <span class="s1">&#39;final result&#39;</span><span class="p">])</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>

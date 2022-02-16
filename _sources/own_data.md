@@ -110,18 +110,18 @@ The reason is that by changing the zone of focus between photographs, we change 
 Since all photographs are taken from the same spot (no translation), we know that pairs of images are linked by a homography. Our idea then was to use registration techniques to retrieve these homographies, express all images in a single coordinate frame, and only then apply the fusion algorithm. The algorithm thus writes
 
 1. Choose $I_0$ one of the images. We will express everything in its reference frame
-2. Registration step  
-    a. extract keypoints from images  
-    b. $\forall k$ compute homographies $H_{k}$ from $I_{k}$ to $I_0$ (RANSAC algorithm)  
+2. Registration step
+    a. extract keypoints from images
+    b. $\forall k$ compute homographies $H_{k}$ from $I_{k}$ to $I_0$ (RANSAC algorithm)
 3. Apply the guided filter fusion algorithm on the $H_kI_k$ images
 
 However, the homography transformation is only valid in the pinhole camera model which of course if not valid here (the whole point is to deal with out of focus objects!). We must try to only transform pairs of images that share a region in-focus. This adds a preliminary ordering step to the algorithm above:
 
 0. Order images by focal distance
 1. We will express everything in the reference frame of the first image
-2. Registration step  
-    a. extract keypoints from images  
-    b. $\forall k$ compute homographies $H_{k}$ from $I_{k+1}$ to $I_{k}$ (RANSAC algorithm)  
+2. Registration step
+    a. extract keypoints from images
+    b. $\forall k$ compute homographies $H_{k}$ from $I_{k+1}$ to $I_{k}$ (RANSAC algorithm)
 3. Apply the guided filter fusion algorithm on the $H_1H_2\ldots H_kI_k$ images
 
 In our case, we do not know the focal distance of each pictures. Instead we leverage the fact that we photographed an almost horizontal plane, and use as a heuristic the mean ordinate $y$ of the region in focus, which we can get from the refined weight maps.

@@ -35,7 +35,7 @@ from imports import BASE_DIR, multi_exposure_dataset, multi_focus_dataset, ours_
 
 +++
 
-Guided filtering {cite}`guided-filter` is a smoothing method which tries to respect image structure (and most notably edges). In this regard, it resembles bilateral filtering. However, guided filtering is able to preserve edges of *another* image.  
+Guided filtering {cite}`guided-filter` is a smoothing method which tries to respect image structure (and most notably edges). In this regard, it resembles bilateral filtering. However, guided filtering is able to preserve edges of *another* image.
 Guided filtering takes two images, $P$ and $I$ as inputs and produces one image $O$ as output.
 - $P$ is called the input image. $O$ is designed to look like $P$.
 - $I$ is called the guidance image. $O$ is structured like $I$ in that it should share the same edges.
@@ -73,7 +73,7 @@ id: 1db043dc-d7c4-4c02-845a-4ef61b96e3cf
 outputId: 33fdd8ee-f681-4879-fd3b-7becadce28fd
 tags: ["remove-input"]
 ---
-plot_images(input, guide, output, 
+plot_images(input, guide, output,
             labels=['input 1', 'input 2', 'output'])
 ```
 
@@ -102,6 +102,6 @@ id: 7fcea546-0a9d-4e6f-8a5f-a4ae4b9ce886
 outputId: 2c56d894-350b-4130-f3e7-dbb02afbca63
 tags: ["remove-input"]
 ---
-plot_images(input, guide, output, 
+plot_images(input, guide, output,
             labels=['input', 'guide', 'filter output'])
 ```

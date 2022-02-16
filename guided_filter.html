@@ -206,23 +206,6 @@
 
             <!-- Launch buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/gbelouze/mva-imagerie-numerique/main?urlpath=tree/docs/guided_filter.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
         </div>
 
         <!-- Table of contents -->
@@ -285,7 +268,7 @@
   <div class="tex2jax_ignore mathjax_ignore section" id="guided-filtering">
 <h1>Guided filtering<a class="headerlink" href="#guided-filtering" title="Permalink to this headline">¶</a></h1>
 <p><img alt="guided_filter_schematic.png" src="_images/guided_filter_schematic.png" /></p>
-<p>Guided filtering <span id="id1">[<a class="reference internal" href="conclusion.html#id3">HST10</a>]</span> is a smoothing method which tries to respect image structure (and most notably edges). In this regard, it resembles bilateral filtering. However, guided filtering is able to preserve edges of <em>another</em> image.<br />
+<p>Guided filtering <span id="id1">[<a class="reference internal" href="conclusion.html#id3">HST10</a>]</span> is a smoothing method which tries to respect image structure (and most notably edges). In this regard, it resembles bilateral filtering. However, guided filtering is able to preserve edges of <em>another</em> image.
 Guided filtering takes two images, <span class="math notranslate nohighlight">\(P\)</span> and <span class="math notranslate nohighlight">\(I\)</span> as inputs and produces one image <span class="math notranslate nohighlight">\(O\)</span> as output.</p>
 <ul class="simple">
 <li><p><span class="math notranslate nohighlight">\(P\)</span> is called the input image. <span class="math notranslate nohighlight">\(O\)</span> is designed to look like <span class="math notranslate nohighlight">\(P\)</span>.</p></li>
