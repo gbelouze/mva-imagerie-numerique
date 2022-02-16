@@ -44,3 +44,7 @@ html:
   use_repository_button: true
   home_page_in_navbar: false
   favicon: "favicon.ico"
+
+# Launch button settings
+launch_buttons:
+  binderhub_url             : ""

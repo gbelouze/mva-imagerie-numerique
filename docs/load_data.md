@@ -76,7 +76,7 @@ id: cf55f8d0-ad5d-4fa7-ae3e-c27d4afe98d7
 outputId: a00c96ed-4a69-4683-bdde-7c4b0c52ce4c
 render:
   figure:
-    caption: 'Multi-exposure sample {cite}`multiexposure`'
+    caption: 'Multi-exposure sample [MEFDatabase]'
     name: multi-exposure-sample
   image:
     width: 600px
@@ -93,7 +93,7 @@ id: 2617f237-fc63-47d6-ac0d-68adf71b98cc
 outputId: 09bf4cb4-883b-4e4f-c768-748a854d8c06
 render:
   figure:
-    caption: 'Multi-focus sample {cite}`lytro`'
+    caption: 'Multi-focus sample [Lytro dataset]'
     name: multi-focus-sample
   image:
     width: 600px
@@ -127,7 +127,7 @@ id: Jy94A6Ksuayu
 outputId: 4b0b696e-db6a-4f03-c2b9-17514cd96f46
 render:
   figure:
-    caption: 'Gray sample {cite}`petrovic`'
+    caption: 'Gray sample [Petrovic dataset]'
     name: gray-sample
   image:
     width: 600px
