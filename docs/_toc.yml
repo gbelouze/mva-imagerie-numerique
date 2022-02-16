@@ -1,0 +1,14 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: intro
+defaults:
+  maxdepth: 2  # The displayed Table of Contents will only have two levels
+chapters:
+- file: load_data
+- file: guided_filter
+- file: image_fusion
+- file: experiments
+- file: own_data
+- file: conclusion
