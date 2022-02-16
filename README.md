@@ -2,7 +2,7 @@
 
 ## How to use this repository ?
 
-You can read the report online as a [notebook](notebook/rendu.ipynb). If you want to run it yourself, we suggest to
+You can [read the report online](https://gbelouze.github.io/mva-imagerie-numerique/). If you want to run it yourself, we suggest to
 - create a python virtual environment, for instance named `imagerie-numerique`
 - install the dependencies
 ```bash
