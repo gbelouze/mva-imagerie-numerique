@@ -11,3 +11,13 @@ Le papier ci-dessus (comme de nombreux autres) propose d'augmenter la profondeur
 Le but du projet est de comprendre le papier, coder la méthode (le code du filtrage est déjà disponible) et la tester sur des jeux d'images fournies.
 
 Si vous le souhaitez, il est possible de créer son propre jeu de données, mais ceci représente un travail assez conséquent qui n'est pas demandé dans le cadre du projet.
+
+## Project description (🇬🇧)
+
+As seen in class, a number of factors influence depth of field in photography: aperture, focal length, distance to the subject. It is therefore common (especially in macro photography or microscopy) not to have a sufficient depth of field to capture all the elements of a scene clearly.
+
+The above paper (like many others) proposes to increase the depth of field by combining several images acquired with different focus settings. The main idea is that at each point the information from the sharpest image at that point is retained. One difficulty is then to combine the information from several images without creating artefacts. The above paper proposes to do this by decomposing the image into two layers: detail and coarse content. This decomposition is performed by means of anisotropic filtering. The method can be adapted to other image fusion modalities (e.g. exposure fusion, see the project on this topic).
+
+The aim of the project is to understand the paper, code the method (the filtering code is already available) and test it on provided image sets.
+
+If you wish, it is possible to create your own dataset, but this is quite a lot of work and is not required for the project.
